@@ -3,7 +3,7 @@ WORKDIR /dashboard
 COPY dashboard/package.json dashboard/bun.lockb* ./
 RUN bun install
 COPY dashboard/ .
-RUN bun run build
+RUN bunx svelte-kit sync && bun run build
 
 FROM oven/bun:1-slim
 WORKDIR /app

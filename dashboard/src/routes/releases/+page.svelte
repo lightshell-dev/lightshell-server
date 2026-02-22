@@ -89,7 +89,7 @@
     <label class="form-label">Release Manifest (JSON)</label>
     <textarea
       bind:value={manifestJson}
-      placeholder='{"version": "1.0.0", "notes": "Initial release", "platforms": {...}}'
+      placeholder={'{"version": "1.0.0", "notes": "Initial release", "platforms": {...}}'}
       rows="6"
       style="width: 100%; font-family: monospace; font-size: 12px; margin-bottom: 12px;"
     ></textarea>
