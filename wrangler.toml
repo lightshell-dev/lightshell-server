@@ -1,0 +1,14 @@
+name = "lightshell-releases"
+main = "src/index.ts"
+compatibility_date = "2026-01-01"
+
+[[r2_buckets]]
+binding = "RELEASES_BUCKET"
+bucket_name = "lightshell-releases"
+
+[vars]
+STORAGE_BACKEND = "r2"
+BASE_URL = "https://lightshell-releases.your-subdomain.workers.dev"
+
+# Set these as secrets via: wrangler secret put API_KEY
+# wrangler secret put ED25519_PUBLIC_KEY

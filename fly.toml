@@ -1,0 +1,20 @@
+app = "lightshell-releases"
+primary_region = "iad"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PORT = "8080"
+  STORAGE_BACKEND = "local"
+  DATA_DIR = "/app/data"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+
+[[mounts]]
+  source = "lightshell_data"
+  destination = "/app/data"

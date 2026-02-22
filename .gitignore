@@ -1,0 +1,11 @@
+node_modules/
+.wrangler/
+dist/
+dashboard/dist/
+dashboard/.svelte-kit/
+dashboard/node_modules/
+.env
+.env.*
+data/
+*.log
+.DS_Store
