@@ -13,19 +13,23 @@ import { StorageBackend, getJSON, putJSON } from "../storage/interface.js";
 import { getAuditLog } from "../middleware/audit-log.js";
 import { DownloadStat, ServerMeta } from "../types.js";
 import { sha256String } from "../crypto/sha256.js";
+import { existsSync } from "fs";
+
+// Resolve dashboard dist path — Docker copies to ./src/dashboard/dist/, local build is ./dashboard/dist/
+const dashboardDist = existsSync("./src/dashboard/dist/index.html")
+  ? "./src/dashboard/dist"
+  : "./dashboard/dist";
 
 export function createDashboardRoutes(getStorage: () => StorageBackend) {
   const app = new Hono();
 
-  // Serve static dashboard assets (Svelte SPA build output)
-  app.use("/dashboard/*", serveStatic({ root: "./src/" }));
-  // SvelteKit outputs assets under _app/ — serve from dashboard dist
-  app.use("/_app/*", serveStatic({ root: "./src/dashboard/dist/" }));
+  // Serve SvelteKit _app assets from dashboard dist
+  app.use("/_app/*", serveStatic({ root: dashboardDist }));
 
   // Serve dashboard SPA — try built index.html first, fall back to placeholder
   app.get("/", async (c) => {
     try {
-      const file = Bun.file("./src/dashboard/dist/index.html");
+      const file = Bun.file(`${dashboardDist}/index.html`);
       if (await file.exists()) {
         return c.html(await file.text());
       }
