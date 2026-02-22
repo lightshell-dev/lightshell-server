@@ -18,11 +18,11 @@ export async function securityHeaders(c: Context, next: Next) {
     "camera=(), microphone=(), geolocation=(), payment=()"
   );
 
-  // CSP for dashboard pages
+  // CSP for dashboard pages — relaxed to support SvelteKit's dynamic imports and Google Fonts
   if (c.req.path === "/" || c.req.path.startsWith("/dashboard")) {
     c.header(
       "Content-Security-Policy",
-      "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'"
+      "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com"
     );
   }
 }

@@ -1,10 +1,9 @@
 <script lang="ts">
-  import { getContext, onMount } from 'svelte';
+  import { onMount } from 'svelte';
   import ReleaseCard from '$lib/components/ReleaseCard.svelte';
   import { api } from '$lib/api';
   import type { Release } from '$lib/types';
-
-  const app: any = getContext('app');
+  import { appState as app } from '$lib/stores.svelte';
 
   let uploadExpanded = $state(false);
   let uploading = $state(false);

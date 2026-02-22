@@ -1,11 +1,10 @@
 <script lang="ts">
-  import { getContext, onMount } from 'svelte';
+  import { onMount } from 'svelte';
   import StatCard from '$lib/components/StatCard.svelte';
   import BarChart from '$lib/components/BarChart.svelte';
   import ReleaseCard from '$lib/components/ReleaseCard.svelte';
   import type { Release } from '$lib/types';
-
-  const app: any = getContext('app');
+  import { appState as app } from '$lib/stores.svelte';
 
   onMount(() => {
     app.loadReleases();

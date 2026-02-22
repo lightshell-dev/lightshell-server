@@ -1,8 +1,7 @@
 <script lang="ts">
-  import { getContext, onMount } from 'svelte';
+  import { onMount } from 'svelte';
   import AuditEntryComp from '$lib/components/AuditEntry.svelte';
-
-  const app: any = getContext('app');
+  import { appState as app } from '$lib/stores.svelte';
 
   let currentPage = $state(0);
   let pageSize = 50;

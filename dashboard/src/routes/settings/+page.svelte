@@ -1,8 +1,6 @@
 <script lang="ts">
-  import { getContext } from 'svelte';
   import { api } from '$lib/api';
-
-  const app: any = getContext('app');
+  import { appState as app } from '$lib/stores.svelte';
 
   // Public key section
   let publicKey = $state('');

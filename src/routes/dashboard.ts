@@ -24,7 +24,38 @@ export function createDashboardRoutes(getStorage: () => StorageBackend) {
   const app = new Hono();
 
   // Serve SvelteKit _app assets from dashboard dist
-  app.use("/_app/*", serveStatic({ root: dashboardDist }));
+  app.get("/_app/*", async (c) => {
+    const filePath = `${dashboardDist}${c.req.path}`;
+    try {
+      const file = Bun.file(filePath);
+      if (await file.exists()) {
+        const ext = filePath.split(".").pop() || "";
+        const types: Record<string, string> = {
+          js: "text/javascript; charset=utf-8",
+          css: "text/css; charset=utf-8",
+          json: "application/json",
+          svg: "image/svg+xml",
+          png: "image/png",
+          woff2: "font/woff2",
+        };
+        return new Response(file, {
+          headers: { "Content-Type": types[ext] || "application/octet-stream" },
+        });
+      }
+    } catch {}
+    return c.notFound();
+  });
+
+  // Serve debug page
+  app.get("/debug", async (c) => {
+    try {
+      const file = Bun.file(`${dashboardDist}/debug.html`);
+      if (await file.exists()) {
+        return c.html(await file.text());
+      }
+    } catch {}
+    return c.text("debug.html not found", 404);
+  });
 
   // Serve dashboard SPA — try built index.html first, fall back to placeholder
   app.get("/", async (c) => {

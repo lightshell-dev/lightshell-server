@@ -1,13 +1,10 @@
 <script lang="ts">
   import '../app.css';
   import Sidebar from '$lib/components/Sidebar.svelte';
-  import { createAppState } from '$lib/stores';
+  import { appState as app } from '$lib/stores.svelte';
   import { page } from '$app/stores';
-  import { setContext } from 'svelte';
 
   let { children } = $props();
-  const app = createAppState();
-  setContext('app', app);
 
   let apiKey = $state('');
   let loginError = $state('');
