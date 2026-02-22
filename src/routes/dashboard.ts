@@ -19,6 +19,8 @@ export function createDashboardRoutes(getStorage: () => StorageBackend) {
 
   // Serve static dashboard assets (Svelte SPA build output)
   app.use("/dashboard/*", serveStatic({ root: "./src/" }));
+  // SvelteKit outputs assets under _app/ — serve from dashboard dist
+  app.use("/_app/*", serveStatic({ root: "./src/dashboard/dist/" }));
 
   // Serve dashboard SPA — try built index.html first, fall back to placeholder
   app.get("/", async (c) => {
