@@ -68,7 +68,7 @@ function getPublicKey(env?: Env): string {
 }
 
 async function getApiKeyHash(env?: Env): Promise<string> {
-  const raw = env?.API_KEY || process.env.API_KEY || "";
+  const raw = env?.API_KEY || process.env.API_KEY || env?.LIGHTSHELL_API_KEY || process.env.LIGHTSHELL_API_KEY || "";
   if (!raw) return "";
   return hashApiKey(raw);
 }
