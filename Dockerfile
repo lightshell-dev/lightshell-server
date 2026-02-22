@@ -11,7 +11,6 @@ ENV PORT=8080
 ENV STORAGE_BACKEND=local
 ENV DATA_DIR=/app/data
 
-VOLUME ["/app/data"]
 
 EXPOSE 8080
 CMD ["bun", "run", "src/index.ts"]
