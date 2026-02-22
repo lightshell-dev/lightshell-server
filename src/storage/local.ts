@@ -5,7 +5,7 @@
 
 import { StorageBackend } from "./interface.js";
 import { mkdir, readFile, writeFile, unlink, readdir, stat } from "node:fs/promises";
-import { join, dirname } from "node:path";
+import { join, dirname, resolve } from "node:path";
 import { existsSync } from "node:fs";
 
 export class LocalStorage implements StorageBackend {
@@ -16,9 +16,13 @@ export class LocalStorage implements StorageBackend {
   }
 
   private resolvePath(key: string): string {
-    // Prevent path traversal
-    const normalized = key.replace(/\.\./g, "").replace(/\/+/g, "/");
-    return join(this.baseDir, normalized);
+    // Prevent path traversal — resolve and verify within base dir
+    const resolved = resolve(join(this.baseDir, key));
+    const base = resolve(this.baseDir);
+    if (!resolved.startsWith(base + "/") && resolved !== base) {
+      throw new Error(`Path traversal denied: ${key}`);
+    }
+    return resolved;
   }
 
   async put(

@@ -29,6 +29,13 @@ export function createDownloadRoute(getStorage: () => StorageBackend) {
       return c.json({ error: "Release has been deprecated" }, 410);
     }
 
+    // Validate inputs to prevent path traversal
+    const SEMVER_RE = /^\d+\.\d+\.\d+(-[\w.]+)?$/;
+    const FILENAME_RE = /^[\w][\w.\-]*\.(tar\.gz|zip|dmg|AppImage|deb|rpm)$/;
+    if (!SEMVER_RE.test(version) || !FILENAME_RE.test(file)) {
+      return c.json({ error: "Invalid version or filename" }, 400);
+    }
+
     // Serve the file
     const key = `releases/${version}/${file}`;
     const result = await storage.get(key);
@@ -47,9 +54,11 @@ export function createDownloadRoute(getStorage: () => StorageBackend) {
 
     c.header("Content-Type", contentType);
     c.header("Content-Length", String(result.size));
+    // Sanitize filename for Content-Disposition header
+    const safeFile = file.replace(/["\r\n\\]/g, "_");
     c.header(
       "Content-Disposition",
-      `attachment; filename="${file}"`
+      `attachment; filename="${safeFile}"`
     );
     c.header("Cache-Control", "public, max-age=86400, immutable");
 

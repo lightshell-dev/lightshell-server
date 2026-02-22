@@ -75,7 +75,10 @@ async function getApiKeyHash(env?: Env): Promise<string> {
 
 // --- Global middleware ---
 app.use("*", securityHeaders);
-app.use("*", cors({ origin: "*", allowMethods: ["GET", "HEAD"] }));
+// CORS: allow all origins for public download routes only
+app.use("/releases/*", cors({ origin: "*", allowMethods: ["GET", "HEAD"] }));
+app.use("/latest.json", cors({ origin: "*", allowMethods: ["GET", "HEAD"] }));
+app.use("/health", cors({ origin: "*", allowMethods: ["GET"] }));
 
 // Rate limiting
 app.use("/latest.json", rateLimiter({ max: 60, windowMs: 60_000 }));
